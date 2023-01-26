@@ -1,0 +1,10 @@
+==============
+TIP PER PERSON
+==============
+ => (((parseFloat(billInput) * (parseFloat(tipPercentage) / 100)) / numOfPeople) *  100) /  100).toFixed(2)
+
+
+==============
+TIP AMOUNT
+==============
+=> (parseFloat(billInput) * (parseFloat(tipPercentage) / 100)) /  numOfPeople + parseFloat(billInput) / numOfPeople.toFixed(2)
