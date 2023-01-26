@@ -1,9 +1,51 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [billInput, setBillInput] = useState(0);
+  const [numOfPeople, setNumOfPeople] = useState(1);
+  const [tip, setTip] = useState(0);
+  const [customTip, setCustomTip] = useState(0);
+
+  const [tipPerPerson, setTipPerPerson] = useState(0.0);
+  const [totalAmount, setTotalAmount] = useState(0.0);
+
+  const handleChangeBillInput = (e) => {
+    setBillInput(e.target.value);
+  };
+
+  const handleChangeNumOfPeople = (e) => {
+    setNumOfPeople(parseInt(e.target.value));
+  };
+
+  const handleChangeTip = (percent) => {
+    setCustomTip("");
+    setTip(percent);
+  };
+
+  const handleChangeCustomTip = (e) => {
+    setTip("");
+    setCustomTip(e.target.value);
+  };
+
+  useEffect(() => {
+    const tipPercentage =
+      tip.length !== 0 ? tip : customTip.length !== 0 ? customTip : 0;
+    const tipPer = (
+      (((parseFloat(billInput) * (parseFloat(tipPercentage) / 100)) /
+        numOfPeople) *
+        100) /
+      100
+    ).toFixed(2);
+    const total =
+      (parseFloat(billInput) * (parseFloat(tipPercentage) / 100)) /
+        numOfPeople +
+      parseFloat(billInput) / numOfPeople.toFixed(2);
+
+    setTipPerPerson(tipPer);
+    setTotalAmount(total);
+  }, [billInput, numOfPeople, customTip, tip]);
 
   return (
     <div
@@ -16,20 +58,27 @@ function App() {
 
       <div
         id="tip_group"
-        className="bg-white w-full max-w-4xl mt-14 shadow-lg rounded-xl shadow-light_grayish_cyan p-8 grid grid-cols-2 gap-10"
+        className="bg-white w-full max-w-3xl mt-14 shadow-lg rounded-xl shadow-light_grayish_cyan p-8 grid grid-cols-2 gap-10"
       >
         <div id="left_side">
           <div id="bill">
             <label htmlFor="bill" className="text-dark_cyan">
               Bill
             </label>
-            <div id="bill_input" className="mt-2">
+            ¬
+            <div id="bill_input" className="mt-2 relative">
               <input
                 type="text"
                 name="bill"
                 id="bill"
-                className=" bg-very_light_grayish_cyan rounded w-full text-dark_cyan font-semibold py-2 text-lg text-end pr-5 outline-dark_cyan"
-                value="142.55"
+                className="bg-very_light_grayish_cyan rounded w-full text-dark_cyan font-semibold py-2 text-lg text-end pr-5 pl-8 outline-dark_cyan"
+                value={billInput}
+                onChange={handleChangeBillInput}
+              />
+              <img
+                src="/images/icon-dollar.svg"
+                alt="dollar icon"
+                className="absolute top-[13px] left-3"
               />
             </div>
           </div>
@@ -40,39 +89,45 @@ function App() {
               <div
                 id="5%"
                 className="bg-dark_cyan py-2 rounded-lg text-center text-lg text-white"
+                onClick={() => handleChangeTip(5)}
               >
                 5%
               </div>
               <div
                 id="10%"
                 className="bg-dark_cyan py-2 rounded-lg text-center text-lg text-white"
+                onClick={() => handleChangeTip(10)}
               >
                 10%
               </div>
               <div
                 id="15%"
                 className="bg-dark_cyan py-2 rounded-lg text-center text-lg text-white"
+                onClick={() => handleChangeTip(15)}
               >
                 15%
               </div>
               <div
                 id="25%"
                 className="bg-dark_cyan py-2 rounded-lg text-center text-lg text-white"
+                onClick={() => handleChangeTip(25)}
               >
                 25%
               </div>
               <div
                 id="50%"
                 className="bg-dark_cyan py-2 rounded-lg text-center text-lg text-white"
+                onClick={() => handleChangeTip(50)}
               >
                 50%
               </div>
-              <div
-                id="custom"
-                className="bg-dark_cyan py-2 rounded-lg text-center text-lg text-white"
-              >
-                Custom
-              </div>
+              <input
+                className=" bg-very_light_grayish_cyan py-2 rounded-lg text-center text-lg text-dark_cyan placeholder:text-dark_cyan"
+                id="customTip"
+                name="customTip"
+                placeholder="Custom"
+                onClick={handleChangeCustomTip}
+              />
             </div>
           </div>
 
@@ -80,13 +135,19 @@ function App() {
             <label htmlFor="number_of_people" className="text-dark_cyan">
               Number of people
             </label>
-            <div id="bill_input" className="mt-2">
+            <div id="bill_input" className="mt-2 relative">
               <input
                 type="text"
                 name="bill"
                 id="bill"
                 className=" bg-very_light_grayish_cyan rounded w-full text-dark_cyan font-semibold py-2 text-lg text-end pr-5 outline-dark_cyan"
-                value="142.55"
+                value={numOfPeople}
+                onChange={handleChangeNumOfPeople}
+              />
+              <img
+                src="/images/icon-person.svg"
+                alt="dollar icon"
+                className="absolute top-[13px] left-3"
               />
             </div>
           </div>
@@ -107,11 +168,11 @@ function App() {
               </div>
               <span className="text-4xl font-bold text-strong_cyan flex items-center">
                 <img
-                  src="/images/icon-dollar.svg"
+                  src="/images/icon-dollar-cyan.svg"
                   alt=""
                   className="mr-2 w-5 text-strong_cyan"
                 />
-                4.27
+                {tipPerPerson}
               </span>
             </div>
 
@@ -125,11 +186,11 @@ function App() {
               </div>
               <span className="text-4xl font-bold text-strong_cyan flex items-center">
                 <img
-                  src="/images/icon-dollar.svg"
+                  src="/images/icon-dollar-cyan.svg"
                   alt=""
                   className="mr-2 w-5 text-strong_cyan"
                 />
-                32.79
+                {totalAmount.toFixed(2)}
               </span>
             </div>
           </div>
