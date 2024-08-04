@@ -1,5 +1,5 @@
 import MobileSidebar from "./MobileSidebar";
-import NavbarRoutes from "./NavbarRoutes";
+import NavbarRoutes from "@/components/navbar-routes";
 
 type Props = {};
 
