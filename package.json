@@ -7,20 +7,39 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "shadcn:add": "npx shadcn-ui@latest add"
+    "shadcn:add": "npx shadcn-ui@latest add",
+    "prisma:generate": "pnpm prisma generate && pnpm rebuild @prisma/client"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.30.0",
+    "@hello-pangea/dnd": "^16.6.0",
+    "@hookform/resolvers": "^3.9.0",
+    "@mux/mux-node": "^8.8.0",
+    "@mux/mux-player-react": "^2.9.0",
+    "@prisma/client": "^5.17.0",
+    "@radix-ui/react-alert-dialog": "^1.1.1",
+    "@radix-ui/react-checkbox": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.1",
+    "@radix-ui/react-label": "^2.1.0",
+    "@radix-ui/react-popover": "^1.1.1",
     "@radix-ui/react-slot": "^1.0.2",
+    "@uploadthing/react": "^6.7.2",
+    "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "cmdk": "^1.0.0",
     "lucide-react": "^0.372.0",
     "next": "14.2.2",
     "react": "^18",
     "react-dom": "^18",
+    "react-hook-form": "^7.52.1",
+    "react-hot-toast": "^2.4.1",
+    "react-quill": "^2.0.0",
+    "slugify": "^1.6.6",
     "tailwind-merge": "^2.3.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "uploadthing": "^6.13.2",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -29,7 +48,11 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.2",
     "postcss": "^8",
+    "prisma": "^5.16.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
+  },
+  "prisma": {
+    "seed": "ts-node ./scripts/seed.ts"
   }
 }
