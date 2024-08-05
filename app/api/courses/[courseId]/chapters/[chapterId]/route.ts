@@ -13,6 +13,89 @@ export type TPostParams = {
   chapterId: string;
 };
 
+export type TDeleteParams = {
+  courseId: string;
+  chapterId: string;
+};
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: TPostParams }
+) {
+  try {
+    const { userId } = auth();
+    const { courseId, chapterId } = params;
+
+    if (!userId) return new NextResponse("Unauthorized", { status: 401 });
+
+    const courseOwner = await db.course.findUnique({
+      where: { id: courseId, userId }
+    });
+
+    if (!courseOwner) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const chapter = await db.chapter.findUnique({
+      where: {
+        id: chapterId,
+        courseId
+      }
+    });
+
+    if (!chapter) {
+      return new NextResponse("Not found", { status: 404 });
+    }
+
+    if (chapter.videoUrl) {
+      const existingMuxData = await db.muxData.findFirst({
+        where: {
+          chapterId
+        }
+      });
+
+      if (existingMuxData) {
+        await video.assets.delete(existingMuxData.assetId);
+        await db.muxData.delete({
+          where: {
+            id: existingMuxData.id
+          }
+        });
+      }
+    }
+
+    const deletedChapter = await db.chapter.delete({
+      where: {
+        id: chapterId,
+        courseId
+      }
+    });
+
+    const publishedChaptersInCourse = await db.chapter.findMany({
+      where: {
+        courseId,
+        isPublished: true
+      }
+    });
+
+    if (!publishedChaptersInCourse.length) {
+      await db.course.update({
+        where: {
+          id: courseId
+        },
+        data: {
+          isPublished: false
+        }
+      });
+    }
+
+    return NextResponse.json(deletedChapter);
+  } catch (error) {
+    console.log("[DELETE CHAPTER] something went wrong", error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}
+
 export async function PATCH(req: Request, { params }: { params: TPostParams }) {
   try {
     const { userId } = auth();
@@ -70,7 +153,7 @@ export async function PATCH(req: Request, { params }: { params: TPostParams }) {
 
     return NextResponse.json(chapter);
   } catch (error) {
-    console.log("[COURSES CHAPTER ID] something went wrong", error);
+    console.log("[PATCH CHAPTER] something went wrong", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }
