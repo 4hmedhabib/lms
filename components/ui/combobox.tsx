@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
-  CommandGroup,
   CommandInput,
-  CommandItem
+  CommandItem,
+  CommandList
 } from "@/components/ui/command";
 import {
   Popover,
@@ -48,8 +48,8 @@ export function Combobox({ options = [], value, onChange }: Props) {
         <Command>
           <CommandInput placeholder="Search option?..." />
           <CommandEmpty>No option found.</CommandEmpty>
-          <CommandGroup>
-            {options?.map((option) => (
+          <CommandList aria-disabled={false} aria-selected={false}>
+            {options?.map((option, idx) => (
               <CommandItem
                 key={option?.value}
                 value={option?.value}
@@ -59,6 +59,8 @@ export function Combobox({ options = [], value, onChange }: Props) {
                 }}
               >
                 <Check
+                  aria-disabled={false}
+                  aria-selected={false}
                   className={cn(
                     "mr-2 h-4 w-4",
                     value === option?.value ? "opacity-100" : "opacity-0"
@@ -67,7 +69,7 @@ export function Combobox({ options = [], value, onChange }: Props) {
                 {option?.label}
               </CommandItem>
             ))}
-          </CommandGroup>
+          </CommandList>
         </Command>
       </PopoverContent>
     </Popover>
