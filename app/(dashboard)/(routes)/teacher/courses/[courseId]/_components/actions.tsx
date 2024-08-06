@@ -46,8 +46,8 @@ const Actions = ({ disabled, courseId, isPublished }: Props) => {
       setIsLoading(true);
       await axios.delete(`/api/courses/${courseId}`);
       toast.success("Course deleted!");
-      router.refresh();
       router.push(`/teacher/courses`);
+      router.refresh();
     } catch (error) {
       toast.error("Something went wrong!");
     } finally {
