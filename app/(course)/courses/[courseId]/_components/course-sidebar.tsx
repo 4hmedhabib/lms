@@ -7,7 +7,7 @@ import CourseSidebarItem from "./course-sidebar-item";
 interface Props {
   course: Course & {
     chapters: (Chapter & {
-      userProgress: UserProgress[];
+      userProgress: UserProgress[] | null;
     })[];
   };
   progressCount: number;
