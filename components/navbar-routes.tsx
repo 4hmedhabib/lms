@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { LogOut } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import SearchInput from "./search-input";
 
@@ -11,10 +11,9 @@ type Props = {};
 
 const NavbarRoutes = (props: Props) => {
   const pathname = usePathname();
-  const router = useRouter();
 
   const isTeacherPage = pathname?.startsWith("/teacher");
-  const isPlayerPage = pathname?.startsWith("/chapter");
+  const isCourses = pathname?.startsWith("/courses");
   const isSearchPage = pathname === "/search";
 
   return (
@@ -25,7 +24,7 @@ const NavbarRoutes = (props: Props) => {
         </div>
       )}
       <div className="flex gap-x-2 ml-auto">
-        {isTeacherPage || isPlayerPage ? (
+        {isTeacherPage || isCourses ? (
           <Link href="/">
             <Button
               size="sm"
