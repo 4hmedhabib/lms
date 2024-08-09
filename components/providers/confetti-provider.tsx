@@ -11,7 +11,7 @@ const ConfettiProvider = (props: Props) => {
 
   return (
     <ReactConfetti
-      className="pointer-events-none z-[100]"
+      className="pointer-events-none z-[100] mx-auto max-w-full h-full"
       recycle={false}
       numberOfPieces={500}
       onConfettiComplete={() => {
