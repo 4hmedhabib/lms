@@ -1,3 +1,4 @@
+import { getIsTeacher } from "@/actions/get-is-teacher";
 import { slugify } from "@/app/utils";
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs";
@@ -9,7 +10,9 @@ export async function POST(req: Request) {
     const { title } = await req.json();
     const courseSlug = slugify(title);
 
-    if (!userId) {
+    const isTeacher = await getIsTeacher(userId);
+
+    if (!userId || !isTeacher) {
       return new NextResponse("Unauthorized, please login again.", {
         status: 401
       });

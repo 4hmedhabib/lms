@@ -1,3 +1,4 @@
+import { getIsTeacher } from "@/actions/get-is-teacher";
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
@@ -13,7 +14,13 @@ export async function PUT(req: Request, { params }: { params: TPutParams }) {
     const { courseId, chapterId } = params;
     const { isCompleted } = await req.json();
 
-    if (!userId) return new NextResponse("Unauthorized", { status: 401 });
+    const isTeacher = await getIsTeacher(userId);
+
+    if (!userId || !isTeacher) {
+      return new NextResponse("Unauthorized, please login again.", {
+        status: 401
+      });
+    }
 
     const userProgress = await db.userProgress.upsert({
       where: {
